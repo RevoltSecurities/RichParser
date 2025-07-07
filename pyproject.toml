@@ -1,0 +1,48 @@
+[project]
+name = "richparser"
+version = "1.0.0"
+description = "RichParser - A beautiful Rich-based CLI wrapper for argparse with subcommand support, sectioned help, and styled output"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "rich>=14.0.0",
+]
+license = { text = "MIT" }
+
+authors = [
+    { name = "D. Sanjai Kumar", email = "bughunterz0047@gmail.com" }
+]
+
+keywords = [
+    "cli",
+    "argparse",
+    "rich",
+    "terminal",
+    "pretty-cli",
+    "devtools",
+    "argparse-wrapper",
+    "command-line",
+    "python-tools"
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities"
+]
+
+[project.urls]
+Homepage = "https://github.com/RevoltSecurities/richparser"
+Repository = "https://github.com/RevoltSecurities/richparser"
+Documentation = "https://github.com/RevoltSecurities/richparser#readme"
+Tracker = "https://github.com/RevoltSecurities/richparser/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
