@@ -7,15 +7,15 @@ import argparse
 import sys
 
 class RichParser:
-    def __init__(self, description=""):
+    def __init__(self, description="", auto=True):
         self.console = Console()
         self.parser = argparse.ArgumentParser(add_help=False, usage=argparse.SUPPRESS)
         self.sections = {}
         self.description = description
         self.color_enabled = True
+        self.auto = auto
         self.subcommands = {}
 
-        # Registering as  global default flags
         self._register_default_flag(self.parser, "-h", "--help", help="show this help message and exit.")
         self._register_default_flag(self.parser, "--plain", help="display the help message in plain text")
 
@@ -36,7 +36,6 @@ class RichParser:
         subparser = argparse.ArgumentParser(prog=name, add_help=False, usage=argparse.SUPPRESS)
         section_dict = {}
 
-        # Adding as default flags to subcommand
         self._register_sub_default_flag(subparser, section_dict, "-h", "--help", help="show this help message and exit.")
         self._register_sub_default_flag(subparser, section_dict, "--plain", help="display the help message in plain text")
 
@@ -68,18 +67,24 @@ class RichParser:
             args = self.subcommands[cmd]["parser"].parse_args(sys.argv[2:])
             if getattr(args, 'plain', False):
                 self.color_enabled = False
-            if getattr(args, 'help', False):
+            if getattr(args, 'help', False) and self.auto:
                 self.display_subcommand_help(cmd)
                 sys.exit(0)
+
+            # added manual help method
+            args.display_help = lambda: self.display_subcommand_help(cmd)
             setattr(args, "mode", cmd)
             return args
         else:
             args = self.parser.parse_args()
             if getattr(args, 'plain', False):
                 self.color_enabled = False
-            if getattr(args, 'help', False):
+            if getattr(args, 'help', False) and self.auto:
                 self.display_help()
                 sys.exit(0)
+
+            # added manual help method
+            args.display_help = self.display_help
             return args
 
     def display_help(self):
@@ -91,16 +96,15 @@ class RichParser:
         self.console.print()
 
         if self.subcommands:
-            if self.color_enabled:
-                table = Table(title="Available Modes", box=box.ROUNDED, show_lines=True,
-                              border_style="#4682B4", header_style="bold dodger_blue1")
-                table.add_column("Mode", style="bold white")
-                table.add_column("Description", style="bold white")
-            else:
-                table = Table(title="Available Modes\n", box=None)
-                table.add_column("Mode")
-                table.add_column("Description")
-
+            table = Table(
+                title="Available Modes",
+                box=box.ROUNDED if self.color_enabled else None,
+                show_lines=True if self.color_enabled else False,
+                border_style="#4682B4" if self.color_enabled else None,
+                header_style="bold dodger_blue1" if self.color_enabled else None,
+            )
+            table.add_column("Mode", style="bold white" if self.color_enabled else "")
+            table.add_column("Description", style="bold white" if self.color_enabled else "")
             for name, data in self.subcommands.items():
                 table.add_row(name, data["description"])
             self.console.print(table)
