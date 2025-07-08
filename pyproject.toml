@@ -1,6 +1,6 @@
 [project]
 name = "richparser"
-version = "1.0.0"
+version = "1.0.1"
 description = "RichParser - A beautiful Rich-based CLI wrapper for argparse with subcommand support, sectioned help, and styled output"
 readme = "README.md"
 requires-python = ">=3.13"
